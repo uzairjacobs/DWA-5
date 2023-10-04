@@ -2,33 +2,21 @@
 
 const form = document.querySelector("[data-form]");
 const result = document.querySelector("[data-result]");
-
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   const entries = new FormData(event.target);
   const { dividend, divider } = Object.fromEntries(entries);
-
-  if (dividend === "" || divider === "") {
-    result.innerText = "Division not performed. Both values are required in inputs. Try again"
-    return
+  if (dividend === '' || divider === '') {
+    result.innerHTML = " Division not performed. Both values are required in inputs. Try again."
   }
-  if (!isNumeric(dividend) || !isNumeric(divider)) {
-    result.innerText = "Division not performed. Invalid number provided. Try again"
-    return
+  else if (divider < 0) {
+    result.innerHTML = "Division not performed. Invalid number provided. Try again."
+    console.error("Invalid number.")
   }
-
-  const quotient = dividend / divider
-  if (isWholeNumber(quotient)) {
-    result.innerText = quotient
+  else if (isNaN(dividend) || isNaN(divider)) {
+    document.body.innerHTML = "Something critical went wrong. Please reload the page.";
+    console.error("Something critical went wrong.");
   } else {
-    result.innerText = Math.floor(quotient)
+    result.innerText = Math.floor(dividend / divider);
   }
 });
-
-function isNumeric(value) {
-  return /^\d+$/.test(value)
-}
-
-function isWholeNumber(value) {
-  return typeof value === 'number' && value % 1 === 0;
-}
